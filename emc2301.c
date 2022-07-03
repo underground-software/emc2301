@@ -34,6 +34,10 @@ ssize_t emc2301_dev_read(struct file *file, char __user *user, size_t s, loff_t 
 
 	my_client = i2c_new_dummy_device(my_adap, 0x2f); // 0x2f - slave address on i2c bus
 	ret = i2c_smbus_read_byte_data(my_client, 0x32); // read fan speed
+
+	i2c_unregister_device(my_client);
+	pr_info("fan device closed. \n");
+
 	return ret;
 }
 
@@ -54,6 +58,10 @@ ssize_t emc2301_dev_write(struct file *file, const char __user *user, size_t spe
 
 	my_client = i2c_new_dummy_device(my_adap, 0x2f); // 0x2f - slave address on i2c bus
 	ret = i2c_smbus_write_byte_data(my_client, 0x32, speed); // set fan speed
+
+	i2c_unregister_device(my_client);
+	pr_info("fan device closed. \n");
+
 	return ret;
 }
 
