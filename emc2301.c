@@ -45,6 +45,7 @@ ssize_t emc2301_dev_write(struct file *file, const char __user *user, size_t spe
 {
 
 	u8 ret; 
+	u8 speedu8 = speed & 0xFF;
 	struct i2c_client *my_client; 
 	struct i2c_adapter *my_adap = i2c_get_adapter(10); // 10 means i2c-10 bus
 
@@ -57,7 +58,9 @@ ssize_t emc2301_dev_write(struct file *file, const char __user *user, size_t spe
 
 
 	my_client = i2c_new_dummy_device(my_adap, 0x2f); // 0x2f - slave address on i2c bus
-	ret = i2c_smbus_write_byte_data(my_client, 0x32, speed); // set fan speed
+	pr_info("i2c device created. \n");
+	ret = i2c_smbus_write_byte_data(my_client, 0x30, speedu8); // set fan speed
+	pr_info("i2c write command ret = %d\n", ret);
 
 	i2c_unregister_device(my_client);
 	pr_info("fan device closed. \n");

@@ -3,8 +3,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
+#include <stdlib.h>
 
-int main(void)
+int main(int argc, char *argv[])
 {
 	int my_dev = open("/dev/emc2301_fan", O_RDWR);
 
@@ -12,12 +13,12 @@ int main(void)
 		perror("open failed");
 	}
 
-	char a;
-	int speed = 0;
+	char a[5] = "abcde";
+	int speed = atoi(argv[1]);
 
 	printf("file descriptor: %d\n", my_dev);
 
-	int err = write(my_dev, &speed, 1); /*set fan speed to 0.*/
+	int err = write(my_dev, a, speed); /*set fan speed.*/
 
 	if (err == -1) {
 		perror("write failed");
